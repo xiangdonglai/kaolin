@@ -168,10 +168,10 @@ class LinearRasterizer(Function):
         tfims_bxhxwxd.requires_grad = True
         tfimprob_bxhxwx1.requires_grad = True
 
-        return tfims_bxhxwxd, tfimprob_bxhxwx1
+        return tfims_bxhxwxd, tfimprob_bxhxwx1, tfimdeps_bxhxwx1
 
     @staticmethod
-    def backward(ctx, dldI_bxhxwxd, dldp_bxhxwx1):
+    def backward(ctx, dldI_bxhxwxd, dldp_bxhxwx1, dldD_bxhxwx1):
         tfims_bxhxwxd, tfimprob_bxhxwx1, \
             tfimidxs_bxhxwx1, tfimweis_bxhxwx3, \
             tfpoints2dmul_bxfx6, tfcolors_bxfx3d, \

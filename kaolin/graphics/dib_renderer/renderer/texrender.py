@@ -68,13 +68,17 @@ class TexRender(nn.Module):
         mask = torch.ones_like(c0[:, :, :1])
         uv_bxfx9 = torch.cat((c0, mask, c1, mask, c2, mask), dim=2)
 
-        imfeat, improb_bxhxwx1 = linear_rasterizer(
+        imfeat, improb_bxhxwx1, depth, = linear_rasterizer(
             self.height,
             self.width,
             points3d_bxfx9,
             points2d_bxfx6,
             normalz_bxfx1,
-            uv_bxfx9
+            uv_bxfx9,
+            None,
+            None,
+            None,
+            100000
         )
 
         imtexcoords = imfeat[:, :, :, :2]
@@ -83,4 +87,4 @@ class TexRender(nn.Module):
         # fragrement shader
         imrender = fragmentshader(imtexcoords, texture_bx3xthxtw, hardmask)
 
-        return imrender, improb_bxhxwx1, normal1_bxfx3
+        return imrender, improb_bxhxwx1, normal1_bxfx3, depth
