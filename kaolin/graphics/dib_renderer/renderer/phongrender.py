@@ -23,7 +23,7 @@ from __future__ import division
 
 from ..rasterizer import linear_rasterizer
 from ..utils import datanormalize
-from .fragment_shaders.frag_shtex import fragmentshader
+from .fragment_shaders.frag_phongtex import fragmentshader
 from .vertex_shaders.perpsective import perspective_projection
 import torch
 import torch.nn as nn
@@ -97,7 +97,7 @@ class PhongRender(nn.Module):
 
         feat = torch.cat((normal_bxfx3x3, eyedirect_bxfx3x3, uv_bxfx3x3), dim=3)
         feat = feat.view(bnum, fnum, -1)
-        imfeature, improb_bxhxwx1 = linear_rasterizer(self.height, self.width,
+        imfeature, improb_bxhxwx1, depth = linear_rasterizer(self.height, self.width,
                                                       points3d_bxfx9, points2d_bxfx6, normalz_bxfx1, feat)
 
         ##################################################################
@@ -117,4 +117,4 @@ class PhongRender(nn.Module):
                                   material_bx3x3, shininess_bx1,
                                   imtexcoords, texture_bx3xthxtw, immask)
 
-        return imrender, improb_bxhxwx1, normal1_bxfx3
+        return imrender, improb_bxhxwx1, normal1_bxfx3, depth
