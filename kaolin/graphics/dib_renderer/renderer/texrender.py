@@ -42,7 +42,8 @@ class TexRender(nn.Module):
 
         ##############################################################
         # first, MVP projection in vertexshader
-        points_bxpx3, faces_fx3 = points
+        points_bxpx3, faces_bxfx3 = points
+        faces_fx3 = faces_bxfx3[0]
 
         # camera_rot_bx3x3, camera_pos_bx3, camera_proj_3x1 = cameras
 
@@ -61,7 +62,8 @@ class TexRender(nn.Module):
 
         ############################################################
         # second, rasterization
-        uv_bxpx2, ft_fx3, texture_bx3xthxtw = colors
+        uv_bxpx2, ft_bxfx3, texture_bx3xthxtw = colors
+        ft_fx3 = ft_bxfx3[0]
         c0 = uv_bxpx2[:, ft_fx3[:, 0], :]
         c1 = uv_bxpx2[:, ft_fx3[:, 1], :]
         c2 = uv_bxpx2[:, ft_fx3[:, 2], :]
