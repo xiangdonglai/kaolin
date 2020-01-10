@@ -41,7 +41,8 @@ class VCRender(nn.Module):
 
         ##############################################################
         # first, MVP projection in vertexshader
-        points_bxpx3, faces_fx3 = points
+        points_bxpx3, faces_bxfx3 = points
+        faces_fx3 = faces_bxfx3[0]
 
         # camera_rot_bx3x3, camera_pos_bx3, camera_proj_3x1 = cameras
 
@@ -67,16 +68,20 @@ class VCRender(nn.Module):
         mask = torch.ones_like(c0[:, :, :1])
         color_bxfx12 = torch.cat((c0, mask, c1, mask, c2, mask), dim=2)
 
-        imfeat, improb_bxhxwx1 = linear_rasterizer(
+        imfeat, improb_bxhxwx1, depth = linear_rasterizer(
             self.height,
             self.width,
             points3d_bxfx9,
             points2d_bxfx6,
             normalz_bxfx1,
-            color_bxfx12
+            color_bxfx12,
+            None,
+            None,
+            None,
+            100000
         )
-
+ 
         imrender = imfeat[:, :, :, :3]
         hardmask = imfeat[:, :, :, 3:]
 
-        return imrender, improb_bxhxwx1, normal1_bxfx3
+        return imrender, improb_bxhxwx1, normal1_bxfx3, depth
