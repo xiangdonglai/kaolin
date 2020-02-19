@@ -37,9 +37,9 @@ class TexRender(nn.Module):
 
         self.height = height
         self.width = width
+        self.returnHardMask = False
 
     def forward(self, points, cameras, colors):
-
         ##############################################################
         # first, MVP projection in vertexshader
         points_bxpx3, faces_bxfx3 = points
@@ -89,4 +89,8 @@ class TexRender(nn.Module):
         # fragrement shader
         imrender = fragmentshader(imtexcoords, texture_bx3xthxtw, hardmask)
 
-        return imrender, improb_bxhxwx1, normal1_bxfx3, depth
+        if self.returnHardMask:
+            # return hardmask instead of the soft probability
+            return imrender, hardmask, normal1_bxfx3, depth
+        else:
+            return imrender, improb_bxhxwx1, normal1_bxfx3, depth
