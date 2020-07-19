@@ -73,9 +73,9 @@ __global__ void dr_cuda_forward_render_batch(
 
     // is this face visible?
     scalar_t direction = pointsdirect_bxfx1[shift1];
-    if (direction < 0) {
-      continue;
-    }
+    // if (direction < 0) {
+    //  continue;
+    // }
 
     ///////////////////////////////////////////////////////////////
     // will this pixel is influenced by this face?
